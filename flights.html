@@ -2,7 +2,19 @@
 <!-- https://www.d3-graph-gallery.com/graph/bubblemap_buttonControl.html -->
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
 
+  div.tooltip{
+    position:absolute;
+    text-align: left;
+    background-color: white;
+    width:250px;
+    height:60px;
+    padding:2px 15px;
+    pointer-events: none;
+  }
+  
+  </style>
 <!-- Load d3.js and the geo projection plugin -->
 <script src="http://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
@@ -26,6 +38,11 @@
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
+
+// tooltip
+var div = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
 // Map and projection
 var projection = d3.geoMercator()               // GPS of location to zoom on
@@ -164,7 +181,7 @@ function percentRank(array, n) {
         //CHECK THAT EACH WAYPOINT IS NON_NULL
         if (flight_nos[i].includes("UA")) {
           console.log("United");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"A",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"A",flight_nos: "United",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           // {long: 9.083, lat: 42.149, group: "A", size: 12}
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#005DAA',
@@ -173,7 +190,7 @@ function percentRank(array, n) {
           // }).addTo(mymap);
         }
         else if (flight_nos[i].includes("AA")) {
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"B",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"B",flight_nos: "American",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           console.log("airlines");
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#C30019',
@@ -183,7 +200,7 @@ function percentRank(array, n) {
         }
         else if (flight_nos[i].includes("DAL")) {
           console.log("delta");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"C",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"C",flight_nos: "Delta",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#9b1631',
           // weight: 1,
@@ -192,7 +209,7 @@ function percentRank(array, n) {
         }
         else if (flight_nos[i].includes("SWA")) {
           console.log("southwest");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"D",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"D",flight_nos: "Southwest",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#F9B612',
           // weight: 1,
@@ -274,6 +291,19 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
         .attr("stroke", function(d){ return color(d.group) })
         .attr("stroke-width", 3)
         .attr("fill-opacity", .4)
+        .on("mouseover", function(d){ 
+              div.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+              div.html(d.flight_nos + "<br/>Average Latency: " + d.latency + "ms<br/>Average Bandwidth: " + d.bw + " Kbps")
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY) + "px");
+          })
+          .on("mouseout", function(d){
+            div.transition()
+              .duration(500)
+              .style("opacity", 0)
+          });
 
 
     // This function is gonna change the opacity and size of selected and unselected circles
