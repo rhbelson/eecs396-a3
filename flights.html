@@ -22,16 +22,17 @@
 <!-- Button -->
 <nav><h1 style="margin-left: 15%;">A3: Visualizing Inflight Wi-Fi Global Fleet</h1></nav>
 <div>
-  <select>
-    <option value="1">Inflight Provider</option>
-    <option value="2">Latency</option>
-    <option value="3">Bandwidth</option>
-    <option value="4">Best Experience</option>
-  </select>
   <input type="checkbox" class="checkbox" value="A" checked><label>United</label>
   <input type="checkbox" class="checkbox" value="B" checked><label>American</label>
   <input type="checkbox" class="checkbox" value="C" checked><label>Delta</label>
   <input type="checkbox" class="checkbox" value="D" checked><label>Southwest</label>
+  <label>Latency: <=</label>
+  <label id="latencyValue">1300</label>ms
+  <input type="range" min="0" max="1300" value="1300" class="slider_L" id="Latency">
+  
+  <label>Bandwidth: >=</label>
+  <label id="BandwidthValue">0</label>Kpbs
+  <input type="range" min="0" max="70000" value="0" class="slider_B" id="Bandwidth">
 </div>
 
 <!-- Create an element where the map will take place -->
@@ -128,7 +129,7 @@ function percentRank(array, n) {
   ///____Rank Top Flights________________ 
 
   //1) By Latency
-  console.log(flights_dict);
+  // console.log(flights_dict);
   let lat_rank=[];
   for (let f=0;f<flights_dict.length;f++) {
     lat_rank.push(flights_dict[f].lat);
@@ -194,7 +195,7 @@ function percentRank(array, n) {
         //CHECK THAT EACH WAYPOINT IS NON_NULL
         if (flight_nos[i].includes("UA")) {
           console.log("United");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"A",flight_nos: "United",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"A",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           // {long: 9.083, lat: 42.149, group: "A", size: 12}
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#005DAA',
@@ -203,7 +204,7 @@ function percentRank(array, n) {
           // }).addTo(mymap);
         }
         else if (flight_nos[i].includes("AA")) {
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"B",flight_nos: "American",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"B",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           console.log("airlines");
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#C30019',
@@ -213,7 +214,7 @@ function percentRank(array, n) {
         }
         else if (flight_nos[i].includes("DAL")) {
           console.log("delta");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"C",flight_nos: "Delta",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"C",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#9b1631',
           // weight: 1,
@@ -222,7 +223,7 @@ function percentRank(array, n) {
         }
         else if (flight_nos[i].includes("SWA")) {
           console.log("southwest");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"D",flight_nos: "Southwest",size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"D",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#F9B612',
           // weight: 1,
@@ -252,7 +253,6 @@ function percentRank(array, n) {
       }
     }
   }
-
 
 
 
@@ -321,7 +321,8 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
 
     // This function is gonna change the opacity and size of selected and unselected circles
     function update(){
-
+      var l_val = document.getElementById('Latency').value;
+      var b_val = document.getElementById('Bandwidth').value;
       // For each check box:
       d3.selectAll(".checkbox").each(function(d){
         cb = d3.select(this);
@@ -329,20 +330,62 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
 
         // If the box is check, I show the group
         if(cb.property("checked")){
-          svg.selectAll("."+grp).transition().duration(1000).style("opacity", 1).attr("r", function(d){ return size(d.size) })
-
+          svg.selectAll("circle")
+          .filter(function(d){ return d.latency <= l_val && Math.floor(d.bw) >= b_val && d.group == grp})
+          .transition().duration(1000).style("opacity", 1).attr("r", function(d){ return size(d.size) })
+          svg.selectAll("circle")
+          .filter(function(d){ return (d.latency > l_val || Math.floor(d.bw) < b_val) && d.group == grp})
+          .transition().duration(1000).style("opacity", 0).attr("r", 0)
         // Otherwise I hide it
         }else{
-          svg.selectAll("."+grp).transition().duration(1000).style("opacity", 0).attr("r", 0)
+          svg.selectAll("circle")
+          .filter(function(d){ return d.group == grp})
+          .transition().duration(1000).style("opacity", 0).attr("r", 0)
         }
+
       })
     }
 
+    function updateTextInput() {
+      var l_val = document.getElementById('Latency').value;
+      var b_val = document.getElementById('Bandwidth').value;
+
+      document.getElementById('latencyValue').innerHTML=l_val?l_val: 1300; 
+      svg.selectAll("circle")
+          .filter(function(d){ return d.latency <= l_val && Math.floor(d.bw) >= b_val})
+          .transition().duration(1000)
+          .style("opacity", 1).attr("r", function(d){ return size(d.size) })
+      svg.selectAll("circle")
+      .filter(function(d){ return d.latency > l_val || Math.floor(d.bw) < b_val})
+      .transition().duration(1000)
+      .style("opacity", 0).attr("r", 0)
+      }
+
+      function updateTextInput_B() {
+      var l_val = document.getElementById('Latency').value;
+      var b_val = document.getElementById('Bandwidth').value;
+
+      document.getElementById('BandwidthValue').innerHTML=b_val?b_val: 0; 
+      svg.selectAll("circle")
+          .filter(function(d){ 
+            return Math.floor(d.bw) >= b_val &&  d.latency <= l_val})
+          .transition().duration(1000)
+          .style("opacity", 1).attr("r", function(d){ return size(d.size) })
+      
+      svg.selectAll("circle")
+      .filter(function(d){ return Math.floor(d.bw) < b_val ||  d.latency > l_val})
+      .transition().duration(1000)
+      .style("opacity", 0).attr("r", 0)
+      }
+
+
     // When a button change, I run the update function
     d3.selectAll(".checkbox").on("change",update);
-
+    d3.selectAll(".slider_L").on("change",updateTextInput);
+    d3.selectAll(".slider_B").on("change",updateTextInput_B);
     // And I initialize it at the beginning
     update()
+    updateTextInput()
+    updateTextInput_B()
 })
-
 </script>
