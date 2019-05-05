@@ -2,6 +2,11 @@
 <!-- https://www.d3-graph-gallery.com/graph/bubblemap_buttonControl.html -->
 <!DOCTYPE html>
 <meta charset="utf-8">
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
 
   div.tooltip{
@@ -12,26 +17,39 @@
     height:60px;
     padding:2px 15px;
     pointer-events: none;
-  }
-  
+  }  
   </style>
+
+<!-- Bootstrap Imports -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
 <!-- Load d3.js and the geo projection plugin -->
 <script src="http://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
 <!-- Button -->
-<nav><h1 style="margin-left: 15%;">A3: Visualizing Inflight Wi-Fi Global Fleet</h1></nav>
-<div>
-  <input type="checkbox" class="checkbox" value="A" checked><label>United</label>
-  <input type="checkbox" class="checkbox" value="B" checked><label>American</label>
-  <input type="checkbox" class="checkbox" value="C" checked><label>Delta</label>
-  <input type="checkbox" class="checkbox" value="D" checked><label>Southwest</label>
-  <label>Latency: <=</label>
+<header class="header normalFont" style="background-color: #4E5E9D;">
+    <h1 style="text-align: center;font-size: 30px; color:#ffffff;padding:20px" >A3: Visualizing Inflight Wi-Fi Global Fleet</h1>
+  </header>
+<div style="margin-left: 15%;border-color: black">
+  <input type="checkbox" class="checkbox" value="A" checked><label style="background-color: #005DAA;padding: 0px 10px 0px 10px;border-radius: 10px">United</label>
+
+  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="B" checked><label style="background-color: #C30019;padding: 0px 10px 0px 10px;border-radius: 10px">American</label>
+
+  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="C" checked><label style="background-color: #9b1631;padding: 0px 10px 0px 10px;border-radius: 10px">Delta</label>
+
+  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="D" checked><label style="background-color: #F9B612;padding: 0px 10px 0px 10px;border-radius: 10px">Southwest</label>
+
+
+  <label style="margin-left:5%;font-weight: bold">Latency less than</label>
   <label id="latencyValue">1300</label>ms
   <input type="range" min="0" max="1300" value="1300" class="slider_L" id="Latency">
   
-  <label>Bandwidth: >=</label>
-  <label id="BandwidthValue">0</label>Kpbs
+  <label style="margin-left:2%;font-weight: bold">Bandwidth greater than</label>
+  <label id="BandwidthValue">0</label>Kbps
   <input type="range" min="0" max="70000" value="0" class="slider_B" id="Bandwidth">
 </div>
 
