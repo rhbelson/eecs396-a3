@@ -7,6 +7,7 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 
   div.tooltip{
@@ -34,24 +35,47 @@
 <header class="header normalFont" style="background-color: #4E5E9D;">
     <h1 style="text-align: center;font-size: 30px; color:#ffffff;padding:20px" >A3: Visualizing Inflight Wi-Fi Global Fleet</h1>
   </header>
-<div style="margin-left: 15%;border-color: black">
-  <input type="checkbox" class="checkbox" value="A" checked><label style="background-color: #005DAA;padding: 0px 10px 0px 10px;border-radius: 10px">United</label>
 
-  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="B" checked><label style="background-color: #C30019;padding: 0px 10px 0px 10px;border-radius: 10px">American</label>
+<div class="container">
+  <div class="row">
 
-  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="C" checked><label style="background-color: #9b1631;padding: 0px 10px 0px 10px;border-radius: 10px">Delta</label>
+  <!--   First Column: Airline Filter -->
+    <div class="col-sm">
+      
+<div style="margin-left: 5%;border-color: black">
+  <h4 style="text-align: center"><i class="fa fa-plane"></i>Filter By Airline</h4>
+  <input type="checkbox" class="checkbox" value="A" checked><label style="background-color: #005DAA;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">United</label>
 
-  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="D" checked><label style="background-color: #F9B612;padding: 0px 10px 0px 10px;border-radius: 10px">Southwest</label>
+  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="B" checked><label style="background-color: #C30019;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">American</label>
+
+  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="C" checked><label style="background-color: #9b1631;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">Delta</label>
+
+  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="D" checked><label style="background-color: #F9B612;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">Southwest</label>
+  </div>
+    </div>
+
+  <!--   Second Column: Metric Filter -->
+    <div class="col-sm">
+        <h4><i class="fa fa-wifi"></i>Filter By Performance Metrics</h4>
+        <label style="margin-left:5%;font-weight: bold">Latency less than</label>
+        <label id="latencyValue">1300</label>ms
+        <input type="range" min="0" max="1300" value="1300" class="slider_L" id="Latency">
+        
+        <label style="margin-left:2%;font-weight: bold">Bandwidth greater than</label>
+        <label id="BandwidthValue">0</label>Kbps
+        <input type="range" min="0" max="70000" value="0" class="slider_B" id="Bandwidth">
+    </div>
 
 
-  <label style="margin-left:5%;font-weight: bold">Latency less than</label>
-  <label id="latencyValue">1300</label>ms
-  <input type="range" min="0" max="1300" value="1300" class="slider_L" id="Latency">
-  
-  <label style="margin-left:2%;font-weight: bold">Bandwidth greater than</label>
-  <label id="BandwidthValue">0</label>Kbps
-  <input type="range" min="0" max="70000" value="0" class="slider_B" id="Bandwidth">
+  </div>
 </div>
+
+
+
+
+
+
+
 
 <!-- Create an element where the map will take place -->
 <svg id="my_dataviz" width="1200" height="550"></svg>
