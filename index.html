@@ -391,43 +391,11 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
       })
     }
 
-    function updateTextInput() {
-      var l_val = document.getElementById('Latency').value;
-      var b_val = document.getElementById('Bandwidth').value;
-
-      document.getElementById('latencyValue').innerHTML=l_val?l_val: 1300; 
-      svg.selectAll("circle")
-          .filter(function(d){ return d.latency <= l_val && Math.floor(d.bw) >= b_val})
-          .transition().duration(1000)
-          .style("opacity", 1).attr("r", function(d){ return size(d.size) })
-      svg.selectAll("circle")
-      .filter(function(d){ return d.latency > l_val || Math.floor(d.bw) < b_val})
-      .transition().duration(1000)
-      .style("opacity", 0).attr("r", 0)
-      }
-
-      function updateTextInput_B() {
-      var l_val = document.getElementById('Latency').value;
-      var b_val = document.getElementById('Bandwidth').value;
-
-      document.getElementById('BandwidthValue').innerHTML=b_val?b_val: 0; 
-      svg.selectAll("circle")
-          .filter(function(d){ 
-            return Math.floor(d.bw) >= b_val &&  d.latency <= l_val})
-          .transition().duration(1000)
-          .style("opacity", 1).attr("r", function(d){ return size(d.size) })
-      
-      svg.selectAll("circle")
-      .filter(function(d){ return Math.floor(d.bw) < b_val ||  d.latency > l_val})
-      .transition().duration(1000)
-      .style("opacity", 0).attr("r", 0)
-      }
-
 
     // When a button change, I run the update function
     d3.selectAll(".checkbox").on("change",update);
-    d3.selectAll(".slider_L").on("change",updateTextInput);
-    d3.selectAll(".slider_B").on("change",updateTextInput_B);
+    d3.selectAll(".slider_L").on("change",update);
+    d3.selectAll(".slider_B").on("change",update);
     // And I initialize it at the beginning
     update()
     updateTextInput()
