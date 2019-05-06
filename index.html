@@ -10,6 +10,8 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="range.css">
+  <link rel="stylesheet" href="checkbox.css">
  </head>
 <style>
 
@@ -37,7 +39,7 @@
 
 <!-- For FlightAware -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="flightaware.js"></script>
+<!-- <script src="flightaware.js"></script> -->
 
 <!-- Button -->
 <header class="header normalFont" style="background-color: #4E5E9D;">
@@ -48,30 +50,40 @@
   <div class="row">
 
   <!--   First Column: Airline Filter -->
-    <div class="col-sm">
+    <div class="col-sm-4">
       
-<div style="margin-left: 5%;border-color: black">
-  <h4 style="text-align: center"><i class="fa fa-plane"></i>Filter By Airline</h4>
-  <input type="checkbox" class="checkbox" value="A" checked><label style="background-color: #005DAA;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">United</label>
+<div style="border-color: black;margin-left: -10%;">
+  <h4 style="text-align: center;margin-bottom: 10%"><i class="fa fa-plane"></i>Filter By Airline</h4>
+  <label class="pure-material-checkbox">
+    <input type="checkbox" class="checkbox" value="A" checked>
+    <span class="ua">United</span>
+  </label>
+  <label class="pure-material-checkbox">
+    <input type="checkbox" class="checkbox" value="B" checked>
+    <span class="aa">American</span>
+  </label>
+  <label class="pure-material-checkbox">
+    <input type="checkbox" class="checkbox" value="C" checked>
+    <span class="da">Delta</span>
+  </label>
 
-  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="B" checked><label style="background-color: #C30019;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">American</label>
+  <label class="pure-material-checkbox">
+    <input type="checkbox" class="checkbox" value="D" checked>
+    <span class="sw">Southwest</span>
+  </label>
 
-  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="C" checked><label style="background-color: #9b1631;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">Delta</label>
-
-  <input style="margin-left: 2%" type="checkbox" class="checkbox" value="D" checked><label style="background-color: #F9B612;padding: 0px 10px 0px 10px;border-radius: 10px;color:white">Southwest</label>
   </div>
     </div>
 
   <!--   Second Column: Metric Filter -->
     <div class="col-sm">
-        <h4><i class="fa fa-wifi"></i>Filter By Performance Metrics</h4>
-        <label style="margin-left:5%;font-weight: bold">Latency less than</label>
+        <h4 style="text-align: center;"><i class="fa fa-wifi"></i>Filter By Performance Metrics</h4>
+        <label style="margin-left:5%;font-weight: bold">Latency <=</label>
         <label id="latencyValue">1300</label>ms
         <input type="range" min="0" max="1300" value="1300" class="slider_L" id="Latency">
-        
-        <label style="margin-left:2%;font-weight: bold">Bandwidth greater than</label>
-        <label id="BandwidthValue">0</label>Kbps
-        <input type="range" min="0" max="70000" value="0" class="slider_B" id="Bandwidth">
+        <label style="margin-left:2%;font-weight: bold">Bandwidth >=</label>
+        <label id="BandwidthValue">0</label>Mbps
+        <input type="range" min="0" max="70" value="0" class="slider_B" id="Bandwidth">
     </div>
 
 
@@ -88,7 +100,7 @@
 <!-- Create an element where the map will take place -->
 <svg id="my_dataviz" width="1200" height="550"></svg>
 
-
+<script src="range.js"></script>
 <script>
 
 // The svg
@@ -245,7 +257,7 @@ function percentRank(array, n) {
         //CHECK THAT EACH WAYPOINT IS NON_NULL
         if (flight_nos[i].includes("UA")) {
           console.log("United");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"A",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"A",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.000008).toFixed(1)});
           // {long: 9.083, lat: 42.149, group: "A", size: 12}
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#005DAA',
@@ -254,7 +266,7 @@ function percentRank(array, n) {
           // }).addTo(mymap);
         }
         else if (flight_nos[i].includes("AA")) {
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"B",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"B",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.000008).toFixed(1)});
           console.log("airlines");
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#C30019',
@@ -264,7 +276,7 @@ function percentRank(array, n) {
         }
         else if (flight_nos[i].includes("DAL")) {
           console.log("delta");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"C",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"C",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.000008).toFixed(1)});
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#9b1631',
           // weight: 1,
@@ -273,7 +285,7 @@ function percentRank(array, n) {
         }
         else if (flight_nos[i].includes("SWA")) {
           console.log("southwest");
-          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"D",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.008).toFixed(1)});
+          markers.push({long:latlngs[flight_nos[i]][l][1],lat:latlngs[flight_nos[i]][l][0],group:"D",flight_nos: flight_nos[i],size:1,latency:latencies[i],bw:parseFloat(bandwidths[i]*0.000008).toFixed(1)});
           // var cm = L.circleMarker(latlngs[flight_nos[i]][l], {
           // color: '#F9B612',
           // weight: 1,
