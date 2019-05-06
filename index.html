@@ -373,6 +373,8 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
     function update(){
       var l_val = document.getElementById('Latency').value;
       var b_val = document.getElementById('Bandwidth').value;
+      document.getElementById("latencyValue").innerHTML = l_val;
+      document.getElementById("BandwidthValue").innerHTML = b_val;
       // For each check box:
       d3.selectAll(".checkbox").each(function(d){
         cb = d3.select(this);
